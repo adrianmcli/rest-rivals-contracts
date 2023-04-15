@@ -77,7 +77,7 @@ contract ContractTest is Test {
         game.submitSleepScore(charlie, 99);
 
         // fast forward time
-        vm.warp(7 days + 1 days);
+        vm.warp(7 days + 1 seconds);
 
         // coordinator determines loser
         address loser = game.determineLoserAndRewards();

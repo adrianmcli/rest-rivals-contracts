@@ -63,7 +63,7 @@ contract Game {
         returns (address)
     {
         require(
-            block.timestamp > roundStartTime + roundDuration,
+            block.timestamp >= roundStartTime + roundDuration,
             "Round still ongoing"
         );
         uint minScoreIndex = 0;
