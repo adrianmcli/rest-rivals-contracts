@@ -2,8 +2,6 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "forge-std/console.sol";
-
 import "../src/Game.sol";
 
 contract ContractTest is Test {
@@ -82,8 +80,11 @@ contract ContractTest is Test {
         // coordinator determines loser
         address loser = game.determineLoserAndRewards();
 
+        // check loser
         assertTrue(loser == alice, "Alice should be the loser");
         assertTrue(address(alice).balance == 0, "Alice should have 0 ether");
+
+        // check balances
         assertTrue(address(bob).balance == 1.5 ether, "Bob should have 1.5 ether");
         assertTrue(address(charlie).balance == 1.5 ether, "Charlie should have 1.5 ether");
         assertTrue(address(game).balance == 0, "Game should have no balance");
