@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "../src/Game.sol";
 
-contract ContractTest is Test {
+contract GameTest is Test {
     address public coordinator;
     uint public stakeAmount = 1 ether;
     Game game;
