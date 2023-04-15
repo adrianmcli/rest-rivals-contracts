@@ -84,7 +84,6 @@ contract Game {
 
     function distributeRewards(uint minScoreIndex) public onlyCoordinator {
         uint totalStake = stakeAmount * numParticipants;
-        // uint bonus = (totalStake / (numParticipants - 1)) - 0.5 ether;
         uint payout = totalStake / (numParticipants - 1);
         for (uint i = 0; i < numParticipants; i++) {
             if (i != minScoreIndex) {
