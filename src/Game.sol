@@ -42,21 +42,22 @@ contract Game {
         roundStartTime = block.timestamp;
     }
 
-    function submitSleepScore(uint _sleepScore) public {
+    function submitSleepScore(
+        address participant,
+        uint _sleepScore
+    ) public onlyCoordinator {
         require(gameActive, "Game is not active");
         require(
             block.timestamp <= roundStartTime + roundDuration,
             "Submission period has ended"
         );
-        Participant storage participant = participants[
-            participantIndex[msg.sender]
-        ];
-        require(!participant.submittedScore, "Sleep score already submitted");
-        participant.sleepScore = _sleepScore;
-        participant.submittedScore = true;
+        Participant storage p = participants[participantIndex[participant]];
+        require(!p.submittedScore, "Sleep score already submitted");
+        p.sleepScore = _sleepScore;
+        p.submittedScore = true;
     }
 
-    function determineWinnerAndRewards()
+    function determineLoserAndRewards()
         public
         onlyCoordinator
         returns (address)
@@ -82,16 +83,15 @@ contract Game {
     }
 
     function distributeRewards(uint minScoreIndex) public onlyCoordinator {
-        uint totalStake = stakeAmount * (numParticipants);
-        uint bonus = totalStake / (numParticipants - 1);
+        uint totalStake = stakeAmount * numParticipants;
+        // uint bonus = (totalStake / (numParticipants - 1)) - 0.5 ether;
+        uint payout = totalStake / (numParticipants - 1);
         for (uint i = 0; i < numParticipants; i++) {
             if (i != minScoreIndex) {
-                participants[i].submittedScore = false;
-                participants[i].sleepScore = 0;
-                payable(participants[i].participantAddress).transfer(
-                    stakeAmount + bonus
-                );
+                payable(participants[i].participantAddress).transfer(payout);
             }
+            participants[i].submittedScore = false;
+            participants[i].sleepScore = 0;
         }
     }
 
